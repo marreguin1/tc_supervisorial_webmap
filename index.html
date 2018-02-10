@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="English">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src='https://api.mapbox.com/mapbox-gl-js/v0.44.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v0.44.0/mapbox-gl.css' rel='stylesheet' />
+    <link rel="stylesheet" type="text/css" href="map.css" />
+
+    <title>Tuolumne County Supervisor Districts</title>
+</head>
+
+<body>
+    <div id='map'></div>
+    <div class='map-overlay' id='features'>
+        <h2>Tuolumne County Supervisor Districts</h2>
+        <div id='pd'>
+            <p id=hover>Hover over a district!</p>
+        </div>
+        <div>
+            <p><a href="https://www.tuolumnecounty.ca.gov/132/Board-of-Supervisors" target="_blank">click here for more info</a></p>
+        </div>
+    </div>
+    <div class='map-overlay' id='legend'></div>
+
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoibWFycmVndWluIiwiYSI6ImNpeTJlMHhlNDAwMXMyd3BnYzRidTl5bTgifQ.IXlLE_wWjCbyFzRk__Nv-w';
+
+    </script>
+
+    <script>
+        var map = new mapboxgl.Map({
+            container: 'map', // container id
+            style: 'mapbox://styles/marreguin/cjdgeg50zarpv2rmwp26x3f65' // replace this with your style URL
+        });
+
+    </script>
+
+    <script>
+        map.on('load', function() {
+            var layers = ['1', '2', '3', '4', '5'];
+            var colors = ['#ca0020', '#f7f7f7', '#f4a582', '#92c5de', '#0571b0'];
+        });
+
+
+    for (i = 0; i < layers.length; i++) {
+        var layer = layers[i];
+        var color = colors[i];
+        var item = document.createElement('div');
+        var key = document.createElement('span');
+        key.className = 'legend-key';
+        key.style.backgroundColor = color;
+
+        var value = document.createElement('span');
+        value.innerHTML = layer;
+        item.appendChild(key);
+        item.appendChild(value);
+        legend.appendChild(item);
+        }
+
+    </script>
+
+    <script>
+        map.on('mousemove', function(e) {
+            var districts = map.queryRenderedFeatures(e.point, {
+                layers: ['Supervisor Districts']
+            });
+
+            if (districts.length > 0) {
+                document.getElementById('pd').innerHTML = '<h3><strong>' + '</strong></h3><h1><strong><em>' + districts[0].properties.DistrictNu + '</strong> </em></h1>';
+            } else {
+                document.getElementById('pd').innerHTML = '<p>Hover over a district!</p>';
+            }
+        });
+
+    </script>
+
+    <script>
+        map.getCanvas().style.cursor = 'default';
+
+    </script>
+
+</body>
+
+</html>
